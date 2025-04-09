@@ -1,0 +1,223 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+/* Основные стили приложения */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Заголовок приложения */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing);
+  background-color: var(--primary-color);
+  color: white;
+  height: var(--header-height);
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.add-button {
+  background-color: white;
+  color: var(--primary-color);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.add-button:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Основное содержимое */
+.app-main {
+  flex: 1;
+  padding: var(--spacing);
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Список заметок */
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Заметка */
+.note-item {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition);
+}
+
+.note-item:hover {
+  box-shadow: var(--shadow-hover);
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.note-header h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.note-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.note-content {
+  margin-bottom: 15px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.note-footer {
+  font-size: 0.85rem;
+  color: #666;
+  text-align: right;
+}
+
+/* Форма заметки */
+.note-form {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: var(--spacing);
+  box-shadow: var(--shadow);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Индикатор офлайн-режима */
+.offline-indicator {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--danger-color);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow);
+  z-index: 1000;
+}
+
+/* Состояние загрузки */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+/* Пустое состояние */
+.empty-state {
+  text-align: center;
+  padding: 50px 0;
+}
+
+.empty-state p {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+/* Адаптивная верстка */
+@media (max-width: 768px) {
+  .app-header h1 {
+    font-size: 1.2rem;
+  }
+  
+  .app-main {
+    padding: 15px;
+  }
+  
+  .note-item {
+    padding: 15px;
+  }
+}
