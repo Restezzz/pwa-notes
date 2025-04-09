@@ -54,7 +54,7 @@ npm run build
 # Предпросмотр продакшен-сборки
 npm run preview
 ```
-Приложение будет доступно по адресу http://localhost:5173/
+Приложение будет доступно по адресу [http://localhost:4173/](http://localhost:4173/)
 
 ## PWA функции
 
