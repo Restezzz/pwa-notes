@@ -1,5 +1,5 @@
 // Название кэша
-const CACHE_NAME = 'notes-app-cache-v1';
+const CACHE_NAME = 'todo-app-cache-v1';
 
 // Ресурсы для предварительного кэширования
 const CACHED_ASSETS = [
@@ -43,6 +43,9 @@ self.addEventListener('activate', (event) => {
       return self.clients.claim();
     })
   );
+  
+  // Запускаем периодические проверки невыполненных задач
+  initializePeriodicSync();
 });
 
 // Стратегия обработки запросов: сначала сеть, затем кэш
@@ -87,24 +90,96 @@ self.addEventListener('fetch', (event) => {
   );
 });
 
-// Синхронизация данных при восстановлении соединения
-self.addEventListener('sync', (event) => {
-  if (event.tag === 'sync-notes') {
-    // Здесь может быть код для синхронизации данных с сервером
-    console.log('Синхронизация данных...');
-  }
-});
-
 // Обработка push-уведомлений
 self.addEventListener('push', (event) => {
-  const data = event.data.json();
-  const options = {
-    body: data.body,
+  let notification = {
+    title: 'Умный список задач',
+    body: 'У вас есть невыполненные задачи!',
     icon: '/icons/note-icon192.png',
     badge: '/icons/note-icon192.png'
   };
+
+  // Если пришли данные в уведомлении, используем их
+  if (event.data) {
+    try {
+      notification = { ...notification, ...event.data.json() };
+    } catch (e) {
+      console.error('Ошибка парсинга данных уведомления:', e);
+    }
+  }
   
   event.waitUntil(
-    self.registration.showNotification('PWA Заметки', options)
+    self.registration.showNotification(notification.title, {
+      body: notification.body,
+      icon: notification.icon,
+      badge: notification.badge,
+      actions: [
+        {
+          action: 'open',
+          title: 'Открыть приложение'
+        }
+      ]
+    })
   );
-}); 
+});
+
+// Обработка клика по уведомлению
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  if (event.action === 'open' || event.action === '') {
+    // Открыть приложение, если пользователь кликнул на уведомление
+    event.waitUntil(
+      clients.matchAll({ type: 'window', includeUncontrolled: true })
+        .then((clientList) => {
+          // Если приложение уже открыто, фокусируемся на нем
+          for (const client of clientList) {
+            if (client.url.includes(self.location.origin) && 'focus' in client) {
+              return client.focus();
+            }
+          }
+          // Иначе открываем новое окно
+          if (clients.openWindow) {
+            return clients.openWindow('/');
+          }
+        })
+    );
+  }
+});
+
+// Периодическая проверка невыполненных задач и отправка уведомлений
+const checkUncompletedTasks = async () => {
+  try {
+    // Открываем базу данных и проверяем невыполненные задачи
+    // В реальном приложении здесь был бы код для проверки базы данных
+    // Для демонстрации просто отправляем уведомление
+    
+    self.registration.showNotification('Умный список задач', {
+      body: 'У вас есть невыполненные задачи!',
+      icon: '/icons/note-icon192.png',
+      badge: '/icons/note-icon192.png',
+      actions: [
+        {
+          action: 'open',
+          title: 'Перейти к задачам'
+        }
+      ]
+    });
+  } catch (error) {
+    console.error('Ошибка при проверке невыполненных задач:', error);
+  }
+};
+
+// Инициализация периодической синхронизации
+const initializePeriodicSync = () => {
+  // В реальном приложении можно использовать периодическую синхронизацию:
+  // if ('periodicSync' in self.registration) {
+  //   self.registration.periodicSync.register('check-tasks', {
+  //     minInterval: 2 * 60 * 60 * 1000 // 2 часа
+  //   });
+  // }
+  
+  // Для демонстрации используем setInterval
+  // В реальном приложении не рекомендуется использовать setInterval в Service Worker
+  setInterval(checkUncompletedTasks, 2 * 60 * 60 * 1000); // Проверяем каждые 2 часа
+}; 
